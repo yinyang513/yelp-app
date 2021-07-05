@@ -2,3 +2,4 @@ flask
 flask-login
 flask-pymongo
 requests
+flask_cors
