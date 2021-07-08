@@ -22,16 +22,19 @@ def sign_in():
     password = request.json['password']
     print(request.json['username'])
     print(request.json['password'])
+    username = db.find_one({"username": user})
     credentials = db.find_one({"username": user, "password": password})
-    print(credentials)
-    if (credentials == None):
+    print(str(username))
+    # print(credentials['username'])
+    if username == None:
         # print('true')
-        return 'make account' #go to home page with hello user
+        return 'make account' #account doesn't exist
+    elif username and credentials == None:
+        return 'False' #wrong password
     elif credentials['username'] == user and credentials['password'] == password:
         # print('true')
-        return 'True' #go to sorry try again
-    else:
-        return 'False'
+        return 'True' #account exists
+    
 
 @app.route('/register', methods = ['POST'])
 def register():
@@ -43,26 +46,33 @@ def register():
     username = request.json['username']
     password = request.json['password']
 
-    print(request.json['first_name'])
-    print(request.json['last_name'])
+    # print(request.json['first_name'])
+    # print(request.json['last_name'])
     print(request.json['email'])
-    print(request.json['birthday'])
-    print(request.json['hometown'])
-    print(request.json['username'])
-    print(request.json['password'])
+    # print(request.json['birthday'])
+    # print(request.json['hometown'])
+    # print(request.json['username'])
+    # print(request.json['password'])
 
     temp = db.find_one({'email': email})
     print(temp)
 
-    if temp == email:
+    if temp != None:
+        print('suh')
         return 'already registered'
-    else: 
-        db.insert({"name": {"firstname": first_name, "lastname": last_name}, 
-                    "email": email, "birthday": birthday, 
-                    "hometown": hometown, "username": username, "password": password})
+    elif temp == None: 
+        print('yay')
+        db.insert({
+            "name": {"firstname": first_name, "lastname": last_name}, 
+            "email": email, 
+            "birthday": birthday, 
+            "hometown": hometown, 
+            "username": username, 
+            "password": password
+            })
         return 'register' #go to home page with hello user
 
-@app.route('/profile', methods = ['POST'])
+@app.route('/profile', methods = ['GET'])
 def profile():
     # current_email = getUserIdFromEmail(flask_login.current_user.id)
     # db.find({"username": current_email})
@@ -71,7 +81,6 @@ def profile():
 @app.route('/restaurants', methods = ['POST'])
 def restaurants():
     if request.method == 'POST':
-        ret = []
         restaurant = request.json['restaurant']
         location = request.json['location']
         radius = request.json['radius']
@@ -127,10 +136,23 @@ def restaurants():
     #     return jsonify(tweets=ret)
 
 
-@app.route('/favorites', methods = ['GET','POST'])
+@app.route('/favorites', methods = ['POST'])
 def favorites():
-    if request.method == 'GET':
-        favorite = request.form.get('favorite')
+    if request.method == 'POST':
+        favorite = request.json['favorite']
+        print(favorite)
+        #add current user_id
+        db.insert({
+            'res_id': favorite[0],
+            'res_name': favorite[1],
+            'res_address': favorite[2],
+            'res_phone': favorite[3],
+            'res_coordinates': favorite[4]
+            })
+    return 'favorited'
+
+@app.route('/explore', methods = ['GET'])
+def explore():
     return
 
 if __name__ == "__main__": 
