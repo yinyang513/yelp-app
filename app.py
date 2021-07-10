@@ -1,16 +1,20 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, json
 from flask_pymongo import PyMongo
 from flask_cors import CORS
+from flask_bcrypt import Bcrypt 
+from flask_jwt_extended import JWTManager 
+from flask_jwt_extended import create_access_token
 import requests
 import config
-import json
 # import flask_login
 
 app = Flask(__name__)
 cors = CORS(app)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/yelp-db"
 mongo = PyMongo(app)
-db = mongo.db.yelp
+bcrypt = Bcrypt(app)
+jwt = JWTManager(app)
+# db = mongo.db.yelp
 
 @app.route('/')
 def main_page():
@@ -18,12 +22,13 @@ def main_page():
 
 @app.route('/sign-in', methods = ['POST'])
 def sign_in():
+    users = mongo.db.users
     user = request.json['username']
     password = request.json['password']
     print(request.json['username'])
     print(request.json['password'])
-    username = db.find_one({"username": user})
-    credentials = db.find_one({"username": user, "password": password})
+    username = users.find_one({"username": user})
+    credentials = users.find_one({"username": user, "password": password})
     print(str(username))
     # print(credentials['username'])
     if username == None:
@@ -53,8 +58,8 @@ def register():
     # print(request.json['hometown'])
     # print(request.json['username'])
     # print(request.json['password'])
-
-    temp = db.find_one({'email': email})
+    users = mongo.db.users
+    temp = users.find_one({'email': email})
     print(temp)
 
     if temp != None:
@@ -62,7 +67,8 @@ def register():
         return 'already registered'
     elif temp == None: 
         print('yay')
-        db.insert({
+        
+        users.insert({
             "name": {"firstname": first_name, "lastname": last_name}, 
             "email": email, 
             "birthday": birthday, 
@@ -142,13 +148,19 @@ def favorites():
         favorite = request.json['favorite']
         print(favorite)
         #add current user_id
-        db.insert({
+        restaurants = mongo.db.user_restaurants
+        restaurants.insert({
             'res_id': favorite[0],
             'res_name': favorite[1],
             'res_address': favorite[2],
             'res_phone': favorite[3],
             'res_coordinates': favorite[4]
             })
+        # print(restaurants)
+        res = restaurants.find()
+        for i in res:
+            print(i)
+        # print(restaurants.find())
     return 'favorited'
 
 @app.route('/explore', methods = ['GET'])
@@ -156,4 +168,4 @@ def explore():
     return
 
 if __name__ == "__main__": 
-    app.run(port=5000, debug=True)
+    app.run(port=5000)
