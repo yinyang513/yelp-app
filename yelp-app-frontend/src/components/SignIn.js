@@ -63,7 +63,7 @@ class Sign_in extends React.Component {
 
     render(){
         return(
-            <div>
+            <div>    
                 <Link to="/home">
                     <button type="button">Home</button>
                 </Link>

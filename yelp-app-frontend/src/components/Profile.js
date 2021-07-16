@@ -1,7 +1,9 @@
 import axios from 'axios';
 import React from 'react'
 import { Link } from 'react-router-dom';
-// import Restaurant from './Restaurant';
+import Restaurant from './Restaurant';
+import Map from './Map'
+// import L from 'leaflet'
 
 class Profile extends React.Component {
     constructor(props) {
@@ -14,11 +16,26 @@ class Profile extends React.Component {
     componentDidMount() {
         console.log('hello')
         axios.get('http://localhost:5000/profile').then(res => {
-            const favoriteRestaurants = res.data
+            const favoriteRestaurants = res.data.restaurants
+            // console.log(favoriteRestaurants)
             favoriteRestaurants.forEach(restaurant => {
+                console.log(restaurant[4].latitude)
+                console.log(restaurant[4].longitude)
                 this.setState({restaurants: [...this.state.restaurants, restaurant]})
             });
         })
+    }
+
+    renderItems = () => {
+        return this.state.restaurants.map(restaurant => (
+            <Restaurant restaurant={restaurant}/>
+        ))
+    }
+
+    renderMap = () => {
+        return this.state.restaurants.map(restaurant => (
+            <Map restaurant={restaurant[4]}/>
+        ))
     }
 
     render(){
@@ -46,7 +63,10 @@ class Profile extends React.Component {
                     <button type="button">Explore</button>
                 </Link>
                 
-                <h1>Welcome to profile page</h1>    
+                <h1>Welcome to profile page</h1>   
+                <h2>Favorite Restaurants</h2>
+                {this.renderItems()} 
+                {this.renderMap()}
             </div>
             
         )

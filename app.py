@@ -16,6 +16,9 @@ bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 # db = mongo.db.yelp
 
+
+current_user = ""
+
 @app.route('/')
 def main_page():
     return 'Welcome to Yelp!'
@@ -27,9 +30,12 @@ def sign_in():
     password = request.json['password']
     print(request.json['username'])
     print(request.json['password'])
+    all_users = users.find()
+    # for i in all_users:
+    #     print(i["_id"])
     username = users.find_one({"username": user})
     credentials = users.find_one({"username": user, "password": password})
-    print(str(username))
+    # print(str(username))
     # print(credentials['username'])
     if username == None:
         # print('true')
@@ -38,6 +44,9 @@ def sign_in():
         return 'False' #wrong password
     elif credentials['username'] == user and credentials['password'] == password:
         # print('true')
+        global current_user 
+        current_user = credentials['_id']
+        print(current_user)
         return 'True' #account exists
     
 
@@ -59,6 +68,7 @@ def register():
     # print(request.json['username'])
     # print(request.json['password'])
     users = mongo.db.users
+    
     temp = users.find_one({'email': email})
     print(temp)
 
@@ -76,12 +86,41 @@ def register():
             "username": username, 
             "password": password
             })
+
+        # get_user_id = users.find_one({
+        #     "name": {"firstname": first_name, "lastname": last_name}, 
+        #     "email": email, 
+        #     "birthday": birthday, 
+        #     "hometown": hometown, 
+        #     "username": username, 
+        #     "password": password
+        #     })
+        global current_user 
+        current_user = temp['_id']
+        print(current_user)
         return 'register' #go to home page with hello user
 
 @app.route('/profile', methods = ['GET'])
 def profile():
     # current_email = getUserIdFromEmail(flask_login.current_user.id)
     # db.find({"username": current_email})
+    restaurants = mongo.db.user_restaurants
+    user_favs = restaurants.find({"user_id": current_user})
+    ret = []
+    #test
+    for restaurant in user_favs:
+        # print(restaurant)
+        ret.append(
+            [
+                restaurant['res_id'],
+                restaurant['res_name'],
+                restaurant['res_address'],
+                restaurant['res_phone'],
+                restaurant['res_coordinates']
+            ])
+    # print(jsonify(restaurants = ret))
+    return jsonify(restaurants = ret)
+    
     return 
 
 @app.route('/restaurants', methods = ['POST'])
@@ -150,6 +189,7 @@ def favorites():
         #add current user_id
         restaurants = mongo.db.user_restaurants
         restaurants.insert({
+            'user_id': current_user,
             'res_id': favorite[0],
             'res_name': favorite[1],
             'res_address': favorite[2],
@@ -165,7 +205,14 @@ def favorites():
 
 @app.route('/explore', methods = ['GET'])
 def explore():
-    return
+    users = mongo.db.users
+    return 'explore'
+
+@app.route('/logout', methods = ['POST'])
+def logout():
+    global current_user
+    current_user = ""
+    return 'logout'
 
 if __name__ == "__main__": 
     app.run(port=5000)
