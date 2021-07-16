@@ -37,7 +37,7 @@ class Restaurant extends React.Component {
         // L.Marker.prototype.options.icon = DefaultIcon;
         return(
             <div className='restaurant-container'>
-                <h1>{this.props.restaurant['res_name']}</h1>
+                <h2>{this.props.restaurant['res_name']}</h2>
                 {displayAddress}
                 <p>{this.props.restaurant['res_phone']}</p>
                 <button onClick={this.handleSubmit}>Favorite</button>

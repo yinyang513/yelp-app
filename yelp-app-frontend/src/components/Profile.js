@@ -2,7 +2,7 @@ import axios from 'axios';
 import React from 'react'
 import { Link } from 'react-router-dom';
 // import Restaurant from './Restaurant';
-import Map from './Map'
+import Map from './containers/Map'
 // import L from 'leaflet'
 
 class Profile extends React.Component {
@@ -14,7 +14,7 @@ class Profile extends React.Component {
     }
 
     componentDidMount() {
-        console.log('hello')
+        // console.log('hello')
         axios.get('http://localhost:5000/profile').then(res => {
             const favoriteRestaurants = res.data.restaurants
             // console.log(favoriteRestaurants)

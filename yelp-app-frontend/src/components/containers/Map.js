@@ -25,10 +25,10 @@ class Map extends React.Component {
 
     return (
       <div>
-        <h1>{this.props.restaurant['res_name']}</h1>
+        <h2>{this.props.restaurant['res_name']}</h2>
         {displayAddress}
         <p>{this.props.restaurant['res_phone']}</p>
-        <MapContainer center={[latitude,longitude]} zoom={12} scrollWheelZoom={false} style={{ width: '50%', height: '300px' }}>
+        <MapContainer center={[latitude,longitude]} zoom={12} scrollWheelZoom={false} style={{ width: '200px', height: '200px' }}>
           <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -40,7 +40,6 @@ class Map extends React.Component {
           </Marker>
         </MapContainer>
       </div>
-      
     )
   }
 }

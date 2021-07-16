@@ -1,5 +1,5 @@
 import React from 'react'
-import Restaurant from '../components/Restaurant'
+import Restaurant from './containers/Restaurant'
 import '../App.css'
 import { Link } from 'react-router-dom';
 import axios from 'axios';

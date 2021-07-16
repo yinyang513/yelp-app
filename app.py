@@ -122,8 +122,6 @@ def profile():
             })
     # print(jsonify(restaurants = ret))
     return jsonify(restaurants = ret)
-    
-    return 
 
 @app.route('/restaurants', methods = ['POST'])
 def restaurants():
@@ -207,8 +205,19 @@ def favorites():
 
 @app.route('/explore', methods = ['GET'])
 def explore():
+    ret = []
     users = mongo.db.users
-    return 'explore'
+    all_users = users.find()
+    for user in all_users:
+        # print(user)
+        ret.append({
+            'user_id': str(user['_id']),
+            'firstname': user['name']['firstname'],
+            'lastname': user['name']['lastname'],
+            'username': user['username']
+        })
+    print(ret)
+    return jsonify(users = ret)
 
 @app.route('/logout', methods = ['POST'])
 def logout():
