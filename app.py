@@ -28,9 +28,9 @@ def sign_in():
     users = mongo.db.users
     user = request.json['username']
     password = request.json['password']
-    print(request.json['username'])
-    print(request.json['password'])
-    all_users = users.find()
+    # print(request.json['username'])
+    # print(request.json['password'])
+    # all_users = users.find()
     # for i in all_users:
     #     print(i["_id"])
     username = users.find_one({"username": user})
@@ -46,7 +46,7 @@ def sign_in():
         # print('true')
         global current_user 
         current_user = credentials['_id']
-        print(current_user)
+        # print(current_user)
         return 'True' #account exists
     
 
@@ -62,7 +62,7 @@ def register():
 
     # print(request.json['first_name'])
     # print(request.json['last_name'])
-    print(request.json['email'])
+    # print(request.json['email'])
     # print(request.json['birthday'])
     # print(request.json['hometown'])
     # print(request.json['username'])
@@ -70,13 +70,13 @@ def register():
     users = mongo.db.users
     
     temp = users.find_one({'email': email})
-    print(temp)
+    # print(temp)
 
     if temp != None:
-        print('suh')
+        # print('suh')
         return 'already registered'
     elif temp == None: 
-        print('yay')
+        # print('yay')
         
         users.insert({
             "name": {"firstname": first_name, "lastname": last_name}, 
@@ -97,7 +97,7 @@ def register():
         #     })
         global current_user 
         current_user = temp['_id']
-        print(current_user)
+        # print(current_user)
         return 'register' #go to home page with hello user
 
 @app.route('/profile', methods = ['GET'])
@@ -185,7 +185,7 @@ def restaurants():
 def favorites():
     if request.method == 'POST':
         favorite = request.json['favorite']
-        print(favorite)
+        # print(favorite)
         #add current user_id
         restaurants = mongo.db.user_restaurants
         restaurants.insert({
@@ -198,8 +198,8 @@ def favorites():
             })
         # print(restaurants)
         res = restaurants.find()
-        for i in res:
-            print(i)
+        # for i in res:
+        #     print(i)
         # print(restaurants.find())
     return 'favorited'
 

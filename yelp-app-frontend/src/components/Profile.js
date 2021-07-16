@@ -19,8 +19,8 @@ class Profile extends React.Component {
             const favoriteRestaurants = res.data.restaurants
             // console.log(favoriteRestaurants)
             favoriteRestaurants.forEach(restaurant => {
-                console.log(restaurant[4].latitude)
-                console.log(restaurant[4].longitude)
+                // console.log(restaurant[4].latitude)
+                // console.log(restaurant[4].longitude)
                 this.setState({restaurants: [...this.state.restaurants, restaurant]})
             });
         })
@@ -28,13 +28,13 @@ class Profile extends React.Component {
 
     renderItems = () => {
         return this.state.restaurants.map(restaurant => (
-            <Restaurant restaurant={restaurant}/>
+            <Restaurant id={restaurant[0]} restaurant={restaurant}/>
         ))
     }
 
     renderMap = () => {
         return this.state.restaurants.map(restaurant => (
-            <Map restaurant={restaurant[4]}/>
+            <Map id={restaurant[0]} restaurant={restaurant[4]}/>
         ))
     }
 

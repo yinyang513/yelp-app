@@ -5,4 +5,5 @@
 3. `export FLASK_APP=app.py`
 4. run the backend `flask run`
 5. switch the frontend folder `cd yelp-app-frontend`
-6. run the frontend `npm start`
+6. install frontend dependencies `npm i`
+7. run the frontend `npm start`

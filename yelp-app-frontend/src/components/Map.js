@@ -1,14 +1,15 @@
 import React from 'react'; 
 import L from 'leaflet'
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+
 import 'leaflet/dist/leaflet.css'
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
 class Map extends React.Component {
-  constructor(props) {
-    super(props);
-  } 
+  // constructor(props) {
+  //   super(props);
+  // } 
 
   render() {
     const latitude = this.props.restaurant.latitude
@@ -29,7 +30,7 @@ class Map extends React.Component {
         />
         <Marker position={[latitude,longitude]}>
           <Popup>
-            Here
+            Located Here!
           </Popup>
         </Marker>
       </MapContainer>
