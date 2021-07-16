@@ -87,8 +87,14 @@ class Search extends React.Component {
             // this.setState({restaurants: [res.data.businesses]})
             const retrievedRestaurants = res.data.businesses
             retrievedRestaurants.forEach(restaurant => {
-                // console.log(restaurant.id)
-                this.setState({restaurants: [...this.state.restaurants, [restaurant.id, restaurant.name, restaurant.location.display_address, restaurant.display_phone, restaurant.coordinates]]})
+                // console.log(restaurant.location.display_address)
+                this.setState({restaurants: [...this.state.restaurants, {
+                    'res_id': restaurant.id, 
+                    'res_name': restaurant.name, 
+                    'res_address': restaurant.location.display_address, 
+                    'res_phone': restaurant.display_phone, 
+                    'res_coordinates': restaurant.coordinates
+                }]})
             })
             // console.log(this.state.restaurants)
         })
@@ -99,7 +105,7 @@ class Search extends React.Component {
         // console.log(this.state.restaurants)
         return this.state.restaurants.map(restaurant => (
             // console.log(restaurant)
-            <Restaurant key={restaurant[0]} restaurant={restaurant}/>
+            <Restaurant key={restaurant['res_id']} restaurant={restaurant}/>
             // console.log('sup')
         ))
     }

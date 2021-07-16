@@ -12,8 +12,9 @@ class Map extends React.Component {
   // } 
 
   render() {
-    const latitude = this.props.restaurant.latitude
-    const longitude = this.props.restaurant.longitude
+    const displayAddress = this.props.restaurant['res_address'].map(address => <p>{address}</p> );
+    const latitude = this.props.restaurant['res_coordinates'].latitude
+    const longitude = this.props.restaurant['res_coordinates'].longitude
 
     let DefaultIcon = L.icon({
       iconUrl: icon,
@@ -23,17 +24,23 @@ class Map extends React.Component {
     L.Marker.prototype.options.icon = DefaultIcon;
 
     return (
-      <MapContainer center={[latitude,longitude]} zoom={12} scrollWheelZoom={false} style={{ width: '50%', height: '300px' }}>
-        <TileLayer
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <Marker position={[latitude,longitude]}>
-          <Popup>
-            Located Here!
-          </Popup>
-        </Marker>
-      </MapContainer>
+      <div>
+        <h1>{this.props.restaurant['res_name']}</h1>
+        {displayAddress}
+        <p>{this.props.restaurant['res_phone']}</p>
+        <MapContainer center={[latitude,longitude]} zoom={12} scrollWheelZoom={false} style={{ width: '50%', height: '300px' }}>
+          <TileLayer
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          <Marker position={[latitude,longitude]}>
+            <Popup>
+              {this.props.restaurant['res_name']}
+            </Popup>
+          </Marker>
+        </MapContainer>
+      </div>
+      
     )
   }
 }

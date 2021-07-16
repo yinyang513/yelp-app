@@ -78,7 +78,7 @@ def register():
     elif temp == None: 
         # print('yay')
         
-        users.insert({
+        get_id = users.insert({
             "name": {"firstname": first_name, "lastname": last_name}, 
             "email": email, 
             "birthday": birthday, 
@@ -86,6 +86,8 @@ def register():
             "username": username, 
             "password": password
             })
+
+        # print("hi" + str(get_id))
 
         # get_user_id = users.find_one({
         #     "name": {"firstname": first_name, "lastname": last_name}, 
@@ -95,8 +97,8 @@ def register():
         #     "username": username, 
         #     "password": password
         #     })
-        global current_user 
-        current_user = temp['_id']
+        global current_user
+        current_user = get_id
         # print(current_user)
         return 'register' #go to home page with hello user
 
@@ -111,13 +113,13 @@ def profile():
     for restaurant in user_favs:
         # print(restaurant)
         ret.append(
-            [
-                restaurant['res_id'],
-                restaurant['res_name'],
-                restaurant['res_address'],
-                restaurant['res_phone'],
-                restaurant['res_coordinates']
-            ])
+            {
+                'res_id': restaurant['res_id'],
+                'res_name': restaurant['res_name'],
+                'res_address': restaurant['res_address'],
+                'res_phone': restaurant['res_phone'],
+                'res_coordinates': restaurant['res_coordinates']
+            })
     # print(jsonify(restaurants = ret))
     return jsonify(restaurants = ret)
     
@@ -190,11 +192,11 @@ def favorites():
         restaurants = mongo.db.user_restaurants
         restaurants.insert({
             'user_id': current_user,
-            'res_id': favorite[0],
-            'res_name': favorite[1],
-            'res_address': favorite[2],
-            'res_phone': favorite[3],
-            'res_coordinates': favorite[4]
+            'res_id': favorite['res_id'],
+            'res_name': favorite['res_name'],
+            'res_address': favorite['res_address'],
+            'res_phone': favorite['res_phone'],
+            'res_coordinates': favorite['res_coordinates']
             })
         # print(restaurants)
         res = restaurants.find()
