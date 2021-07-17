@@ -11,11 +11,11 @@ import config
 app = Flask(__name__)
 cors = CORS(app)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/yelp-db"
+app.config['JWT_SECRET_KEY'] = 'secret'
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 # db = mongo.db.yelp
-
 
 current_user = ""
 
@@ -27,27 +27,42 @@ def main_page():
 def sign_in():
     users = mongo.db.users
     user = request.json['username']
-    password = request.json['password']
+    password = request.json['password'].encode('utf-8')
     # print(request.json['username'])
     # print(request.json['password'])
     # all_users = users.find()
     # for i in all_users:
     #     print(i["_id"])
     username = users.find_one({"username": user})
-    credentials = users.find_one({"username": user, "password": password})
+    all_users = users.find()
+    for user in all_users:
+        print(user)
+    # print(username['password'])
+    # credentials = users.find_one({"username": user, "password": password})
     # print(str(username))
     # print(credentials['username'])
     if username == None:
         # print('true')
         return 'make account' #account doesn't exist
-    elif username and credentials == None:
-        return 'False' #wrong password
-    elif credentials['username'] == user and credentials['password'] == password:
-        # print('true')
-        global current_user 
-        current_user = credentials['_id']
-        # print(current_user)
-        return 'True' #account exists
+    else:
+        if bcrypt.check_password_hash(username['password'], password):
+            access_token = create_access_token(identity = {
+                'firstname': username['name']['firstname'],
+                'lastname': username['name']['lastname'],
+                'email': username['email']
+            })
+            return access_token
+        else:
+            return "try again"
+
+        # if credentials == None:
+        #     return 'False' #wrong password
+        # elif credentials['username'] == user and credentials['password'] == password:
+        #     # print('true')
+        #     global current_user 
+        #     current_user = credentials['_id']
+        #     # print(current_user)
+        #     return 'True' #account exists
     
 
 @app.route('/register', methods = ['POST'])
@@ -58,7 +73,7 @@ def register():
     birthday = request.json['birthday']
     hometown = request.json['hometown']
     username = request.json['username']
-    password = request.json['password']
+    password = bcrypt.generate_password_hash(request.json['password']).decode('utf-8')
 
     # print(request.json['first_name'])
     # print(request.json['last_name'])
@@ -87,6 +102,12 @@ def register():
             "password": password
             })
 
+        access_token = create_access_token(identity = {
+                'firstname': username['name']['firstname'],
+                'lastname': username['name']['lastname'],
+                'email': username['email']
+            })
+
         # print("hi" + str(get_id))
 
         # get_user_id = users.find_one({
@@ -100,7 +121,7 @@ def register():
         global current_user
         current_user = get_id
         # print(current_user)
-        return 'register' #go to home page with hello user
+        return access_token #go to home page with hello user
 
 @app.route('/profile', methods = ['GET'])
 def profile():
@@ -111,7 +132,7 @@ def profile():
     ret = []
     #test
     for restaurant in user_favs:
-        # print(restaurant)
+        print(restaurant)
         ret.append(
             {
                 'res_id': restaurant['res_id'],
@@ -195,7 +216,7 @@ def favorites():
             'res_address': favorite['res_address'],
             'res_phone': favorite['res_phone'],
             'res_coordinates': favorite['res_coordinates']
-            })
+        })
         # print(restaurants)
         res = restaurants.find()
         # for i in res:
@@ -224,6 +245,14 @@ def logout():
     global current_user
     current_user = ""
     return 'logout'
+
+@app.route('/set-user', methods = ['POST'])
+def setUser():
+    token = request.json['token']
+    global current_user
+    current_user = token
+    print(current_user)
+    return 'token saved'
 
 if __name__ == "__main__": 
     app.run(port=5000)

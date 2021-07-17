@@ -15,6 +15,9 @@ class Profile extends React.Component {
 
     componentDidMount() {
         // console.log('hello')
+        console.log(localStorage.getItem('usertoken'))
+        axios.post('http://localhost:5000/set-user', {'token': localStorage.getItem('usertoken')})
+
         axios.get('http://localhost:5000/profile').then(res => {
             const favoriteRestaurants = res.data.restaurants
             // console.log(favoriteRestaurants)

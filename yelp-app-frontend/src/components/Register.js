@@ -75,9 +75,12 @@ class Register extends React.Component {
             }
             else {
                 this.setState({redirect: 'register'})
+                localStorage.setItem('usertoken', res.data)
             }
         })
         console.log('here')
+
+        axios.post('http://localhost:5000/set-user', {'token': localStorage.getItem('usertoken')})
     }
 
     renderRedirect = () => {

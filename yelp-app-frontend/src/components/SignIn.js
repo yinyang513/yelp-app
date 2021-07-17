@@ -33,17 +33,22 @@ class Sign_in extends React.Component {
             password: this.state.password
         }
         axios.post('http://localhost:5000/sign-in', credentials).then(res => {
-            console.log(res.data);
+            console.log(res.data)
             if (res.data === 'make account') {
                 this.setState({redirect: 'make account'})
             }
-            else if (res.data ==='False'){
-                this.setState({redirect: 'False'})
+            else if (res.data ===' try again'){
+                this.setState({redirect: 'try again'})
             }
-            else if (res.data === 'True'){
+            else {
+                // console.log('sup')
                 this.setState({redirect: 'True'})
+                localStorage.setItem('usertoken', res.data)
+                console.log(localStorage)
             }
         })
+
+        axios.post('http://localhost:5000/set-user', {'token': localStorage.getItem('usertoken')})
         // console.log('here')
     }
 
@@ -54,7 +59,7 @@ class Sign_in extends React.Component {
         else if (this.state.redirect === 'True') {
             return <Redirect to='/profile' />
         }
-        else if (this.state.redirect === 'False') {
+        else if (this.state.redirect === 'try again') {
             // event.preventDefault()
             return <Redirect to='/sign-in' />
         }
