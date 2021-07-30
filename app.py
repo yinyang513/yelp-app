@@ -27,7 +27,8 @@ def main_page():
 def sign_in():
     users = mongo.db.users
     user = request.json['username']
-    password = request.json['password'].encode('utf-8')
+    # password = request.json['password'].encode('utf-8')
+    password = request.get_json()['password']
     # print(request.json['username'])
     # print(request.json['password'])
     # all_users = users.find()
@@ -35,9 +36,9 @@ def sign_in():
     #     print(i["_id"])
     
     username = users.find_one({"username": user})
-    print(username)
-    print(str(username['password'])==str(password))
-    print(str(password))
+    # print(username)
+    # print(str(username['password'])==str(password))
+    # print(str(password))
     # print(bcrypt.check_password_hash(username['password'], password))
     all_users = users.find()
     # for user in all_users:
@@ -50,9 +51,9 @@ def sign_in():
         # print('true')
         return 'make account' #account doesn't exist
     else:
-        if not username['password'] or not password:
-            return False
-        if bcrypt.check_password_hash(str(username['password']), str(password)):
+        # if not username['password'] or not password:
+        #     return False
+        if bcrypt.check_password_hash(username['password'], password):
             access_token = create_access_token(identity = {
                 'firstname': username['name']['firstname'],
                 'lastname': username['name']['lastname'],
@@ -92,7 +93,7 @@ def register():
     users = mongo.db.users
     
     temp = users.find_one({'email': email})
-    # print(temp)
+    print(temp)
 
     if temp != None:
         # print('suh')
@@ -110,9 +111,9 @@ def register():
             })
 
         access_token = create_access_token(identity = {
-                'firstname': username['name']['firstname'],
-                'lastname': username['name']['lastname'],
-                'email': username['email']
+                'firstname': first_name,
+                'lastname': last_name,
+                'email': email
             })
 
         # print("hi" + str(get_id))

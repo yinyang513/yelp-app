@@ -83,7 +83,7 @@ class Search extends React.Component {
         }
 
         axios.post('http://localhost:5000/set-user', {'token': localStorage.getItem('usertoken')})
-
+        console.log(localStorage.getItem('usertoken'))
         axios.post('http://localhost:5000/restaurants', restaurant).then(res => {
             // console.log(res.data.businesses);
             // this.setState({restaurants: [res.data.businesses]})
