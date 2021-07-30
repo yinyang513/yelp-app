@@ -116,6 +116,9 @@ class Register extends React.Component {
                 <Link to="/explore">
                     <button type="button">Explore</button>
                 </Link>
+                <Link to="/sign-out">
+                    <button type="button">Sign Out</button>
+                </Link>
 
                 <h1>Register</h1>
                 {this.renderRedirect()}

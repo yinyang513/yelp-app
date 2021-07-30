@@ -11,6 +11,7 @@ import Register from './components/Register';
 import Search from './components/Search';
 import Favorites from './components/Favorites';
 import Explore from './components/Explore';
+import SignOut from './components/SignOut';
 
 class App extends React.Component {
   render(){
@@ -18,6 +19,9 @@ class App extends React.Component {
       <Router>
 
         <Switch>
+          <Route path="/sign-out">
+            <SignOut />
+          </Route>
           <Route path="/explore">
             <Explore />
           </Route>

@@ -136,6 +136,9 @@ class Search extends React.Component {
                 <Link to="/explore">
                     <button type="button">Explore</button>
                 </Link>
+                <Link to="/sign-out">
+                    <button type="button">Sign Out</button>
+                </Link>
                 
                 <h1>Search Restaurants:</h1>
                 <form id="restaurant_search" action="restaurants" method="post">

@@ -17,6 +17,7 @@ class Profile extends React.Component {
         // console.log('hello')
         console.log(localStorage.getItem('usertoken'))
         axios.post('http://localhost:5000/set-user', {'token': localStorage.getItem('usertoken')})
+        console.log('got token')
 
         axios.get('http://localhost:5000/profile').then(res => {
             const favoriteRestaurants = res.data.restaurants
@@ -64,6 +65,9 @@ class Profile extends React.Component {
                 </Link>
                 <Link to="/explore">
                     <button type="button">Explore</button>
+                </Link>
+                <Link to="/sign-out">
+                    <button type="button">Sign Out</button>
                 </Link>
                 
                 <h1>Welcome to profile page</h1>   

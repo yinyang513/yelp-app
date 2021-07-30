@@ -17,7 +17,7 @@ bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 # db = mongo.db.yelp
 
-current_user = ""
+current_user = None
 
 @app.route('/')
 def main_page():
@@ -33,10 +33,15 @@ def sign_in():
     # all_users = users.find()
     # for i in all_users:
     #     print(i["_id"])
+    
     username = users.find_one({"username": user})
+    print(username)
+    print(str(username['password'])==str(password))
+    print(str(password))
+    # print(bcrypt.check_password_hash(username['password'], password))
     all_users = users.find()
-    for user in all_users:
-        print(user)
+    # for user in all_users:
+    #     print(user)
     # print(username['password'])
     # credentials = users.find_one({"username": user, "password": password})
     # print(str(username))
@@ -45,7 +50,9 @@ def sign_in():
         # print('true')
         return 'make account' #account doesn't exist
     else:
-        if bcrypt.check_password_hash(username['password'], password):
+        if not username['password'] or not password:
+            return False
+        if bcrypt.check_password_hash(str(username['password']), str(password)):
             access_token = create_access_token(identity = {
                 'firstname': username['name']['firstname'],
                 'lastname': username['name']['lastname'],
@@ -127,8 +134,9 @@ def register():
 def profile():
     # current_email = getUserIdFromEmail(flask_login.current_user.id)
     # db.find({"username": current_email})
+    print(current_user)
     restaurants = mongo.db.user_restaurants
-    user_favs = restaurants.find({"user_id": current_user})
+    user_favs = restaurants.find({"user_id": str(current_user)})
     ret = []
     #test
     for restaurant in user_favs:
@@ -240,11 +248,12 @@ def explore():
     print(ret)
     return jsonify(users = ret)
 
-@app.route('/logout', methods = ['POST'])
+@app.route('/sign-out', methods = ['POST'])
 def logout():
+    empty_token = request.json['token']
     global current_user
-    current_user = ""
-    return 'logout'
+    current_user = empty_token
+    return 'sign out'
 
 @app.route('/set-user', methods = ['POST'])
 def setUser():

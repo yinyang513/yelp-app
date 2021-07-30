@@ -1,29 +1,13 @@
-import React from 'react'
 import axios from 'axios';
+import React from 'react'
 import { Link } from 'react-router-dom';
-import Users from './containers/Users';
 
-class Explore extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            users: []
-        }
-    }
-    componentDidMount() {
-        axios.get('http://localhost:5000/explore').then(res => {
-            const all_users = res.data.users
-            all_users.forEach(user => {
-                console.log(user['username'])
-                this.setState({users: [...this.state.users, user]})
-            });
-        })
-    }
+class SignOut extends React.Component {
 
-    renderItems = () => {
-        return this.state.users.map(user => (
-            <Users id={user['user_id']} user={user}/>
-        ))
+    componentDidMount () {
+        localStorage.removeItem('usertoken')
+        // console.log(localStorage.getItem('usertoken'))
+        axios.post('http://localhost:5000/sign-out', {'token': ''})
     }
 
     render(){
@@ -53,11 +37,14 @@ class Explore extends React.Component {
                 <Link to="/sign-out">
                     <button type="button">Sign Out</button>
                 </Link>
-                <h1>Welcome to Explore</h1>
-                {this.renderItems()}
+
+                <h1>Welcome to Yelp</h1>
+                
             </div>
+
+            
         )
     }
 }
 
-export default Explore
+export default SignOut
