@@ -82,8 +82,9 @@ class Search extends React.Component {
             open_now: this.state.open_now
         }
 
-        axios.post('http://localhost:5000/set-user', {'token': localStorage.getItem('usertoken')})
-        console.log(localStorage.getItem('usertoken'))
+        // axios.post('http://localhost:5000/set-user', {'token': localStorage.getItem('usertoken')})
+        axios.post('http://localhost:5000/set-user', {'user': localStorage.getItem('user_id')})
+        console.log(localStorage.getItem('user_id'))
         axios.post('http://localhost:5000/restaurants', restaurant).then(res => {
             // console.log(res.data.businesses);
             // this.setState({restaurants: [res.data.businesses]})

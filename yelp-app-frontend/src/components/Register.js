@@ -73,7 +73,7 @@ class Register extends React.Component {
                 // event.preventDefault()
                 this.setState({redirect: 'already registered'})
             }
-            else {
+            else { //check if localstorage is full
                 this.setState({redirect: 'register'})
                 // localStorage.setItem('usertoken', res.data)
                 localStorage.setItem('usertoken', res.data['access_token'])

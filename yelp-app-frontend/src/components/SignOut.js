@@ -6,6 +6,7 @@ class SignOut extends React.Component {
 
     componentDidMount () {
         localStorage.removeItem('usertoken')
+        localStorage.removeItem('user_id')
         // console.log(localStorage.getItem('usertoken'))
         axios.post('http://localhost:5000/sign-out', {'token': ''})
     }

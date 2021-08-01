@@ -104,7 +104,7 @@ class Sign_in extends React.Component {
                     Username:
                     <input type="text" name="username" value={this.state.username} onChange={this.handleChangeUsername}/><br></br>
                     Password:
-                    <input type="text" name="password" value={this.state.password} onChange={this.handleChangePassword} /><br></br>
+                    <input type="text" name="password" value={this.state.password} onChange={this.handleChangePassword}/><br></br>
                 </label>
                 <button onClick={this.handleSubmit}>Submit</button>
                 </form>

@@ -7,7 +7,7 @@ class Users extends React.Component {
         return(
             <div>
                 <h3>{this.props.user['firstname']} {this.props.user['lastname']}</h3>
-                <p>{this.props.user['username']}</p>
+                <p>@{this.props.user['username']}</p>
             </div>
         )
     }

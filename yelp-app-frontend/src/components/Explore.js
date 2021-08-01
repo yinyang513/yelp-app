@@ -14,7 +14,7 @@ class Explore extends React.Component {
         axios.get('http://localhost:5000/explore').then(res => {
             const all_users = res.data.users
             all_users.forEach(user => {
-                console.log(user['username'])
+                // console.log(user['username'])
                 this.setState({users: [...this.state.users, user]})
             });
         })
