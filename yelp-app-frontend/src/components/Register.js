@@ -80,7 +80,8 @@ class Register extends React.Component {
         })
         console.log('here')
 
-        axios.post('http://localhost:5000/set-user', {'token': localStorage.getItem('usertoken')})
+        // axios.post('http://localhost:5000/set-user', {'token': localStorage.getItem('usertoken')})
+        axios.post('http://localhost:5000/set-user', {'user': localStorage.getItem('user_id')})
     }
 
     renderRedirect = () => {

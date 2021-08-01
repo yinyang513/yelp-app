@@ -36,7 +36,7 @@ def sign_in():
     #     print(i["_id"])
     
     username = users.find_one({"username": user})
-    # print(username)
+    print(username['_id'])
     # print(str(username['password'])==str(password))
     # print(str(password))
     # print(bcrypt.check_password_hash(username['password'], password))
@@ -53,13 +53,16 @@ def sign_in():
     else:
         # if not username['password'] or not password:
         #     return False
+
+        # return the db user id as well 
         if bcrypt.check_password_hash(username['password'], password):
             access_token = create_access_token(identity = {
+                'user_id': str(username['_id']),
                 'firstname': username['name']['firstname'],
                 'lastname': username['name']['lastname'],
                 'email': username['email']
             })
-            return access_token
+            return jsonify({'user_id': str(username['_id']),'access_token': access_token})
         else:
             return "try again"
 
@@ -109,8 +112,9 @@ def register():
             "username": username, 
             "password": password
             })
-
+        # print(get_id)
         access_token = create_access_token(identity = {
+                'user_id': get_id,
                 'firstname': first_name,
                 'lastname': last_name,
                 'email': email
@@ -129,7 +133,8 @@ def register():
         global current_user
         current_user = get_id
         # print(current_user)
-        return access_token #go to home page with hello user
+        # return the db user id as well 
+        return jsonify({'user_id': get_id,'access_token': access_token}) #go to home page with hello user
 
 @app.route('/profile', methods = ['GET'])
 def profile():
@@ -258,9 +263,9 @@ def logout():
 
 @app.route('/set-user', methods = ['POST'])
 def setUser():
-    token = request.json['token']
+    user = request.json['user']
     global current_user
-    current_user = token
+    current_user = user
     print(current_user)
     return 'token saved'
 

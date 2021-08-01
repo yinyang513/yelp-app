@@ -33,7 +33,7 @@ class Sign_in extends React.Component {
             password: this.state.password
         }
         axios.post('http://localhost:5000/sign-in', credentials).then(res => {
-            console.log(res.data)
+            // console.log(res.data)
             if (res.data === 'make account') {
                 this.setState({redirect: 'make account'})
             }
@@ -43,12 +43,15 @@ class Sign_in extends React.Component {
             else {
                 // console.log('sup')
                 this.setState({redirect: 'True'})
-                localStorage.setItem('usertoken', res.data)
-                console.log(localStorage)
+                console.log(res.data)
+                localStorage.setItem('usertoken', res.data['access_token'])
+                localStorage.setItem('user_id', res.data['user_id'])
+                console.log(localStorage.getItem('usertoken'))
+                console.log(localStorage.getItem('user_id'))
             }
         })
 
-        axios.post('http://localhost:5000/set-user', {'token': localStorage.getItem('usertoken')})
+        axios.post('http://localhost:5000/set-user', {'user': localStorage.getItem('user_id')})
         // console.log('here')
     }
 
