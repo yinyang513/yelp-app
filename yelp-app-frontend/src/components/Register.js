@@ -75,7 +75,9 @@ class Register extends React.Component {
             }
             else {
                 this.setState({redirect: 'register'})
-                localStorage.setItem('usertoken', res.data)
+                // localStorage.setItem('usertoken', res.data)
+                localStorage.setItem('usertoken', res.data['access_token'])
+                localStorage.setItem('user_id', res.data['user_id'])
             }
         })
         console.log('here')
