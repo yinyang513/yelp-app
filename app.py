@@ -87,8 +87,9 @@ def register():
         current_user = get_id
         return jsonify({'user_id': get_id,'access_token': access_token}) #go to home page with hello user
 
-@app.route('/profile/:id', methods = ['GET'])
-def profile():
+@app.route('/profile', methods = ['GET'])
+def profile(username):
+    print(username)
     user = request.args.get('username')
     # print(username)
     print('hi ' + str(user))

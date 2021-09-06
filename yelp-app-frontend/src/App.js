@@ -37,7 +37,7 @@ class App extends React.Component {
           <Route path="/sign-in">
             <SignIn />
           </Route>
-          <Route path="/profile/:id">
+          <Route path="/profile">
             <Profile />
           </Route>
           <Route path="/">
