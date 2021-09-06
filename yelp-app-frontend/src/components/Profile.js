@@ -14,11 +14,11 @@ class Profile extends React.Component {
     }
 
     componentDidMount() {
-        // console.log('hello')
-        console.log(localStorage.getItem('usertoken'))
+        // console.log(localStorage.getItem('usertoken'))
+        console.log(this.state.username)
         // axios.post('http://localhost:5000/set-user', {'token': localStorage.getItem('usertoken')})
         axios.post('http://localhost:5000/set-user', {'user': localStorage.getItem('user_id')})
-        console.log('got token')
+        // console.log('got token')
 
         axios.get('http://localhost:5000/profile').then(res => {
             const favoriteRestaurants = res.data.restaurants
