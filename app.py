@@ -75,6 +75,7 @@ def register():
             "username": username, 
             "password": password
             })
+        get_id = str(get_id)
         # print(get_id)
         access_token = create_access_token(identity = {
                 'user_id': get_id,
@@ -83,23 +84,25 @@ def register():
                 'email': email
             })
 
+        access_token = 'asdkjfhasdf'
+
         global current_user
         current_user = get_id
-        return jsonify({'user_id': get_id,'access_token': access_token}) #go to home page with hello user
+        return {'user_id': get_id,'access_token': access_token} #go to home page with hello user
 
 @app.route('/profile', methods = ['GET'])
-def profile(username):
-    print(username)
+def profile():
+    # print(username)
     user = request.args.get('username')
     # print(username)
-    print('hi ' + str(user))
-    print(current_user)
+    # print('hi ' + str(user))
+    # print(current_user)
     restaurants = mongo.db.user_restaurants
     user_favs = restaurants.find({"user_id": str(current_user)})
     ret = []
     #test
     for restaurant in user_favs:
-        print(restaurant)
+        # print(restaurant)
         ret.append(
             {
                 'res_id': restaurant['res_id'],
@@ -159,7 +162,7 @@ def explore():
             'lastname': user['name']['lastname'],
             'username': user['username']
         })
-    print(ret)
+    # print(ret)
     return jsonify(users = ret)
 
 @app.route('/sign-out', methods = ['POST'])
@@ -174,7 +177,7 @@ def setUser():
     user = request.json['user']
     global current_user
     current_user = user
-    print(current_user)
+    # print(current_user)
     return 'token saved'
 
 if __name__ == "__main__": 

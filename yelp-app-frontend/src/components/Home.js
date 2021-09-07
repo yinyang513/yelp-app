@@ -26,6 +26,9 @@ class Home extends React.Component {
                 <Link to="/explore">
                     <button type="button">Explore</button>
                 </Link>
+                <Link to="/sign-out">
+                    <button type="button">Sign Out</button>
+                </Link>
 
                 <h1>Welcome to Yelp</h1>
                 
